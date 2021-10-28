@@ -26,11 +26,11 @@ namespace FilmBot
                 connection.Close();
         }
 
-        public string GetFromBD(string sql)
+        public string GetFromBD()
         {
             string res = "";
 
-            MySqlCommand cm = new MySqlCommand(sql,GetConnection());
+            MySqlCommand cm = new MySqlCommand(_sql,GetConnection());
             
             MySqlDataReader reader = cm.ExecuteReader();
 
@@ -50,7 +50,7 @@ namespace FilmBot
             _sql = sql;
             //string sql = $"SELECT `name`,`descript` FROM `filmdescription` WHERE name={film}";
             this.openConnection();
-            res = GetFromBD(sql);
+            res = GetFromBD();
             this.closeConnection();
             return res;
         }
