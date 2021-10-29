@@ -15,7 +15,7 @@ namespace FilmBot
 {
     class Program
     {
-        private static string token { get; set; } = "тут токен";
+        private static string token { get; set; } = "2034602500:AAE_S3cs8E3ZTxglygveyevYGXg3N-ATapg";
         private static TelegramBotClient client;
 
         static string FilmName;
@@ -37,6 +37,10 @@ namespace FilmBot
             var msg = e.Message;
             if ((msg.Text != null) & (msg.Type == Telegram.Bot.Types.Enums.MessageType.Text))
             {
+                Console.WriteLine($"Message come: {msg.Text}");
+
+                msg.Text = Char.ToUpper(msg.Text[0]) + msg.Text.Substring(1);
+
                 Console.WriteLine($"Message come: {msg.Text}");
 
                 DB FilmData = new DB();
