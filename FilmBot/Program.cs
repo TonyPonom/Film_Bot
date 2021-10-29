@@ -15,7 +15,7 @@ namespace FilmBot
 {
     class Program
     {
-        private static string token { get; set; } = "2034602500:AAE_S3cs8E3ZTxglygveyevYGXg3N-ATapg";
+        private static string token { get; set; } = "токен";
         private static TelegramBotClient client;
 
         static string FilmName;
