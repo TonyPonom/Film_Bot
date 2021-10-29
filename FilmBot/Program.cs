@@ -59,29 +59,58 @@ namespace FilmBot
 
                     case "Год выпуска":
 
-                        sql = $"SELECT `name`,`year` FROM `filmdescription` WHERE name LIKE '{FilmName}%'";
-                        answerOnFilm = FilmData.SelectFromBD(sql) + " года выпуска";
-                        await client.SendTextMessageAsync(msg.Chat.Id, answerOnFilm, replyMarkup: GetButtons2());
+                        try
+                        {
+                            sql = $"SELECT `name`,`year` FROM `filmdescription` WHERE name LIKE '{FilmName}%'";
+                            answerOnFilm = FilmData.SelectFromBD(sql) + " года выпуска";
+                            await client.SendTextMessageAsync(msg.Chat.Id, answerOnFilm, replyMarkup: GetButtons2());
+                        }
+                        catch (MySql.Data.MySqlClient.MySqlException)
+                        {
+                            answerOnFilm = "Проблема с подключением к БД";
+                            await client.SendTextMessageAsync(msg.Chat.Id, answerOnFilm, replyMarkup: GetButtons());
+                            return;
+                        }
 
                         break;
 
                     case "Оценка кинопоиск":
 
-                        sql = $"SELECT `name`,`starskinopoisk` FROM `evaluation` WHERE name LIKE '{FilmName}%'";
-                        answerOnFilm = FilmData.SelectFromBD(sql);
-                        await client.SendTextMessageAsync(msg.Chat.Id, answerOnFilm, replyMarkup: GetButtons2());
+                        try
+                        {
+                            sql = $"SELECT `name`,`starskinopoisk` FROM `evaluation` WHERE name LIKE '{FilmName}%'";
+                            answerOnFilm = FilmData.SelectFromBD(sql);
+                            await client.SendTextMessageAsync(msg.Chat.Id, answerOnFilm, replyMarkup: GetButtons2());
+                        }
+                        catch (MySql.Data.MySqlClient.MySqlException)
+                        {
+                            answerOnFilm = "Проблема с подключением к БД";
+                            await client.SendTextMessageAsync(msg.Chat.Id, answerOnFilm, replyMarkup: GetButtons());
+                            return;
+                        }
 
                         break;
 
                     case "Оценка IMDb":
 
-                        sql = $"SELECT `name`,`starsIMDb` FROM `evaluation` WHERE name LIKE '{FilmName}%'";
-                        answerOnFilm = FilmData.SelectFromBD(sql);
-                        await client.SendTextMessageAsync(msg.Chat.Id, answerOnFilm, replyMarkup: GetButtons2());
+                        try
+                        {
+                            sql = $"SELECT `name`,`starsIMDb` FROM `evaluation` WHERE name LIKE '{FilmName}%'";
+                            answerOnFilm = FilmData.SelectFromBD(sql);
+                            await client.SendTextMessageAsync(msg.Chat.Id, answerOnFilm, replyMarkup: GetButtons2());
+                        }
+                        catch (MySql.Data.MySqlClient.MySqlException)
+                        {
+                            answerOnFilm = "Проблема с подключением к БД";
+                            await client.SendTextMessageAsync(msg.Chat.Id, answerOnFilm, replyMarkup: GetButtons());
+                            return;
+                        }
 
                         break;
 
                     default:
+                        //MySql.Data.MySqlClient.MySqlException
+                        //Telegram.Bot.Exceptions.ApiRequestException
                         try
                         {
                             sql = $"SELECT `name`,`descript` FROM `filmdescription` WHERE name LIKE '{msg.Text}%'";
@@ -89,10 +118,16 @@ namespace FilmBot
                             FilmName = msg.Text;
                             await client.SendTextMessageAsync(msg.Chat.Id, answerOnFilm, replyMarkup: GetButtons2());
                         }
-                        catch (Exception)
+                        catch (MySql.Data.MySqlClient.MySqlException)
                         {
-                            answerOnFilm = "Данного фильма нет в БД или возникла проблема подключения к БД";
-                            await client.SendTextMessageAsync(msg.Chat.Id, answerOnFilm, replyMarkup: GetButtons2());
+                            answerOnFilm = "Проблема с подключением к БД";
+                            await client.SendTextMessageAsync(msg.Chat.Id, answerOnFilm, replyMarkup: GetButtons());
+                            return;
+                        }
+                        catch (Telegram.Bot.Exceptions.ApiRequestException)
+                        {
+                            answerOnFilm = "Данного фильма нет в БД";
+                            await client.SendTextMessageAsync(msg.Chat.Id, answerOnFilm, replyMarkup: GetButtons());
                             return;
                         }
                         break;
